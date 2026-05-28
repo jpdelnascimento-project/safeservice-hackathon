@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe|Service - Plataforma Integrada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CONFIGURAÇÃO BASE - OCUPA A TELA TODA */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: #e2e8f0; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0; 
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* CONTAINER PRINCIPAL OCUPANDO A TELA INTEIRA */
+        .app-container {
+            width: 100%;
+            height: 100vh;
+            background-color: #f4f6f9;
+            display: flex;
+            position: relative;
+        }
+
+        /* SIDEBAR GLOBAL (SEMPRE FIXA À ESQUERDA) */
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            height: 100%;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .logo-area { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 50px; display: flex; align-items: center; gap: 10px; }
+        .logo-area span { color: #3b82f6; }
+
+        .nav-item { 
+            padding: 15px 20px; border-radius: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 15px; color: #64748b; text-decoration: none; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        }
+        .nav-item:hover { background-color: #f8fafc; color: #0f172a; }
+        .nav-item.active { background-color: #eff6ff; color: #3b82f6; font-weight: 700; }
+
+        /* REGRAS DE NAVEGAÇÃO SPA (Esconder/Mostrar os painéis da direita) */
+        .page-content {
+            display: none; /* Esconde por padrão */
+            flex-grow: 1;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto; /* Permite rolar a página se o conteúdo for grande */
+        }
+        .page-content.active {
+            display: flex; /* Mostra apenas a tela que tem a classe active */
+        }
+
+        /* ESTRUTURA DOS PAINÉIS INTERNOS (DIREITA) */
+        .dashboard-header { height: 90px; padding: 0 40px; display: flex; justify-content: flex-end; align-items: center; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
+        
+        .wallet-status {
+            background-color: #f1f5f9; padding: 10px 20px; border-radius: 100px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; color: #334155;
+        }
+        .status-dot { width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; }
+
+        .content-body { padding: 40px; display: flex; flex-direction: column; gap: 24px; flex-grow: 1; }
+        .page-title h2 { font-size: 28px; font-weight: 800; color: #0f172a; }
+        .page-title p { color: #64748b; margin-top: 4px; font-size: 15px; }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* TELA 1: EMPRESA CONTRATANTE */
+        .form-card { background-color: #ffffff; padding: 32px; border-radius: 24px; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04); max-width: 700px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 700; color: #334155; margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px 20px; border-radius: 12px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-family: inherit; font-size: 15px; outline: none; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #3b82f6; background-color: #ffffff; }
+        .btn-submit { background-color: #0f172a; color: white; padding: 16px 32px; border-radius: 100px; border: none; font-weight: 700; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15); transition: all 0.2s; }
+        .btn-submit:hover { transform: translateY(-2px); background-color: #1e293b; }
+        
+        .os-alert-container { display: flex; gap: 24px; align-items: start; max-width: 1100px; }
+        .os-alert-card { background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 24px; padding: 28px; width: 360px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.04); display: none; gap: 16px; flex-shrink: 0; }
+        .os-alert-icon { width: 44px; height: 44px; background-color: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .os-alert-info h4 { font-size: 16px; color: #065f46; font-weight: 800; }
+        .os-alert-info p { font-size: 14px; color: #047857; margin-top: 6px; line-height: 1.5; }
+        .os-tag { display: inline-block; background-color: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; margin-top: 8px; }
+
+        /* LISTAS LATERAIS INTERNAS (PRESTADOR E INSPEÇÃO) */
+        .os-sidebar-container { background-color: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; gap: 16px; height: 480px; }
+        .search-box { position: relative; width: 100%; }
+        .search-box input { width: 100%; padding: 12px 16px 12px 40px; border-radius: 10px; border: 1px solid #cbd5e1; background-color: #f8fafc; font-family: inherit; font-size: 14px; outline: none; }
+        .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px; }
+        .os-sidebar-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .os-scroll-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex-grow: 1; padding-right: 4px; }
+        .os-scroll-list::-webkit-scrollbar { width: 6px; }
+        .os-scroll-list::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .os-scroll-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .os-list-card { padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background-color: #f8fafc; cursor: pointer; transition: all 0.2s; }
+        .os-list-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+        .os-list-card p { font-size: 12px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ACENTOS VISUAIS EXCLUSIVOS DOS PAINÉIS */
+        #page-prestador .search-box input:focus { border-color: #3b82f6; background-color: #ffffff; }
+        #page-prestador .os-list-card:hover { border-color: #3b82f6; background-color: #fdfdfd; }
+        #page-prestador .os-list-card.active { border-color: #3b82f6; background-color: #eff6ff; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.06); }
+        #page-prestador .os-list-header .id { color: #3b82f6; }
+
+        #page-inspecao .search-box input:focus { border-color: #16a34a; background-color: #ffffff; }
+        #page-inspecao .os-list-card:hover { border-color: #16a34a; background-color: #fdfdfd; }
+        #page-inspecao .os-list-card.active { border-color: #16a34a; background-color: #f0fdf4; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.06); }
+        #page-inspecao .os-list-header .id { color: #16a34a; }
+
+        /* CARDS DE DETALHES DA DIREITA */
+        .service-detail-card { background-color: #ffffff; border-radius: 24px; border: 1px solid #e2e8f0; padding: 32px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; gap: 20px; height: 480px; }
+        .card-header-info { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; }
+        .os-badge { font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 8px; display: inline-block; margin-bottom: 8px; }
+        #page-prestador .os-badge { color: #3b82f6; background-color: #eff6ff; }
+        #page-inspecao .os-badge { color: #16a34a; background-color: #f0fdf4; }
+        .contract-title { font-size: 22px; font-weight: 800; color: #0f172a; }
+        
+        .status-badge { padding: 8px 16px; border-radius: 100px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .status-badge.waiting { background-color: #fef3c7; color: #d97706; }
+        .status-badge.ready { background-color: #e0f2fe; color: #0369a1; }
+
+        .meta-info-strip { display: grid; grid-template-columns: 1fr 220px; gap: 16px; }
+        .meta-info-grid { display: grid; grid-template-columns: 1fr 1fr 200px; gap: 12px; }
+        
+        .meta-box, .value-display, .contractor-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+        .meta-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        
+        .icon-building { background-color: #e0f2fe; color: #0369a1; }
+        .icon-wrench { background-color: #eff6ff; color: #3b82f6; }
+        .icon-lock { background-color: #dcfce7; color: #15803d; }
+        
+        .meta-text span { display: block; font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+        .meta-text h4 { font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; }
+        .meta-text h4.amount { font-size: 17px; font-weight: 800; }
+
+        .description-block h5 { font-size: 14px; color: #334155; font-weight: 700; margin-bottom: 6px; }
+        .description-block p { font-size: 14px; color: #475569; line-height: 1.5; }
+
+        /* BOTÕES DE AÇÃO */
+        .actions-area { display: flex; align-items: center; gap: 16px; margin-top: auto; }
+        .btn-action { background-color: #3b82f6; color: white; padding: 16px 32px; border-radius: 100px; border: none; font-weight: 700; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.24); transition: all 0.2s; }
+        .btn-action:hover { background-color: #2563eb; transform: translateY(-2px); }
+        
+        .btn-approve { background-color: #16a34a; color: white; padding: 16px 32px; border-radius: 100px; border: none; font-weight: 700; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.2); transition: all 0.2s; }
+        .btn-approve:hover { background-color: #15803d; transform: translateY(-2px); }
+        .btn-reject { background-color: #ffffff; color: #64748b; padding: 16px 28px; border-radius: 100px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: all 0.2s; }
+        .btn-reject:hover { background-color: #f8fafc; color: #ef4444; border-color: #fca5a5; }
+        .btn-reject-cancel { background-color: #ffffff; color: #dc3545; padding: 16px 28px; border-radius: 100px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: all 0.2s; }
+        .btn-reject-cancel:hover { background-color: #fdf2f2; color: #a71d2a; border-color: #fca5a5; }
+        .btn-reject-review { background-color: #fff7ed; color: #ea580c; padding: 16px 28px; border-radius: 100px; border: 1px solid #fed7aa; font-weight: 600; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: all 0.2s; }
+        .btn-reject-review:hover { background-color: #ffedd5; color: #c2410c; border-color: #fb923c; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="sidebar">
+        <div class="logo-area"><i class="fa-solid fa-shield-halved"></i> Safe<span>Service</span></div>
+        <nav>
+            <div class="nav-item active" data-target="page-contratante"><i class="fa-solid fa-industry"></i> Empresa Contratante</div>
+            <div class="nav-item" data-target="page-prestador"><i class="fa-solid fa-user-gear"></i> Painel Prestador</div>
+            <div class="nav-item" data-target="page-inspecao"><i class="fa-solid fa-magnifying-glass-chart"></i> Inspeção</div>
+        </nav>
+    </div>
+
+    <div class="page-content active" id="page-contratante">
+        <header class="dashboard-header">
+            <div class="wallet-status"><div class="status-dot"></div>0x818C...F8F8 (Sepolia)</div>
+        </header>
+        <div class="content-body">
+            <div class="page-title">
+                <h2>Empresa Contratante</h2>
+                <p>Abra uma nova Ordem de Serviço e aloque fundos sob garantia digital.</p>
+            </div>
+            
+            <div class="os-alert-container">
+                <div class="form-card">
+                    <div class="form-group">
+                        <label>Sua Carteira (Contratante)</label>
+                        <input id="display-contratante" type="text" readonly style="background:#f1f5f9;color:#64748b;">
+                    </div>
+                    <div class="form-group">
+                        <label>Carteira Digital do Prestador (Endereço ETH/USDC)</label>
+                        <input id="input-prestador" type="text" value="0x3F9A...44B2">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Serviço Geral</label>
+                        <select id="select-tipo-servico">
+                            <option>Manutenção Mecânica / Usinagem</option>
+                            <option>Instalação Elétrica Industrial</option>
+                            <option>Sistemas de Climatização (HVAC)</option>
+                            <option>Infraestrutura e Obra Civil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Alocado para o Projeto (USDC)</label>
+                        <input id="input-valor" type="text" value="2500.00">
+                    </div>
+                    <div class="form-group">
+                        <label>Carteira Digital do Fiscal (Endereço ETH)</label>
+                        <input id="input-fiscal" type="text" placeholder="0x...">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição Detalhada do Escopo</label>
+                        <textarea id="textarea-descricao" rows="3">Realizar a troca dos filtros de linha, análise de vibração técnica estrutural e substituição do óleo lubrificante do sistema de compressores de ar do Bloco B.</textarea>
+                    </div>
+                    <button class="btn-submit"><i class="fa-solid fa-file-signature"></i> Registrar e Emitir O.S.</button>
+                </div>
+                
+                <div class="os-alert-card">
+                    <div class="os-alert-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="os-alert-info">
+                        <h4>Sucesso: Transação Confirmada!</h4>
+                        <p>O contrato inteligente foi minerado e gerou uma nova ordem indexada:</p>
+                        <span class="os-tag">O.S. GERADA: #1024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content" id="page-prestador">
+        <header class="dashboard-header">
+            <div class="wallet-status"><div class="status-dot"></div>0x3F9A...44B2 (Sepolia)</div>
+        </header>
+        <div class="content-body">
+            <div class="page-title">
+                <h2>Painel do Prestador de Serviço</h2>
+                <p>Gerencie suas ordens ativas, filtre chamados e sinalize a conclusão do escopo técnico.</p>
+            </div>
+            <div class="workspace-grid">
+                <div class="os-sidebar-container">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Buscar por O.S. ou serviço...">
+                    </div>
+                    <span class="os-sidebar-title">Ordens Vinculadas</span>
+                    <div class="os-scroll-list">
+                        <div class="os-list-card active">
+                            <div class="os-list-header"><span class="id">O.S. #1024</span><span class="value">2.500 USDC</span></div>
+                            <p>Manutenção Mecânica / Usinagem</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #1019</span><span class="value">1.800 USDC</span></div>
+                            <p>Instalação Elétrica Industrial</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0994</span><span class="value">4.200 USDC</span></div>
+                            <p>Sistemas de Climatização (HVAC)</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0981</span><span class="value">950 USDC</span></div>
+                            <p>Reparo de Caldeira de Vapor</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0975</span><span class="value">3.100 USDC</span></div>
+                            <p>Automação PLC e Sensores</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0962</span><span class="value">1.500 USDC</span></div>
+                            <p>Manutenção de Subestação</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-detail-card">
+                    <div class="card-header-info">
+                        <div>
+                            <span class="os-badge">O.S. SELECIONADA: #1024</span>
+                            <h3 class="contract-title">Manutenção Corretiva - Compressor Bloco B</h3>
+                        </div>
+                        <div class="status-badge waiting"><i class="fa-solid fa-hourglass-half"></i> Retido em Escrow</div>
+                    </div>
+                    <div class="meta-info-strip">
+                        <div class="contractor-box">
+                            <div class="meta-icon icon-building"><i class="fa-solid fa-building"></i></div>
+                            <div class="meta-text"><span>Empresa Contratante</span><h4>0x818C...F8F8 (AgroS.A.)</h4></div>
+                        </div>
+                        <div class="value-display">
+                            <div class="meta-icon icon-lock"><i class="fa-solid fa-lock"></i></div>
+                            <div class="meta-text"><span>Garantia Blockchain</span><h4 class="amount">2.500 USDC</h4></div>
+                        </div>
+                    </div>
+                    <div class="description-block">
+                        <h5>Critérios e Escopo Vinculado:</h5>
+                        <p>Realizar a troca dos filtros de linha, análise de vibração técnica estrutural e substituição do óleo lubrificante do sistema de compressores de ar do Bloco B. O pagamento será liberado imediatamente após a validação do fiscal técnico.</p>
+                    </div>
+                    <div class="actions-area">
+                        <button class="btn-action"><i class="fa-solid fa-circle-check"></i> Declarar e Finalizar o Serviço</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content" id="page-inspecao">
+        <header class="dashboard-header">
+            <div class="wallet-status"><div class="status-dot"></div>0x9F8B...11A3 (Sepolia)</div>
+        </header>
+        <div class="content-body">
+            <div class="page-title">
+                <h2>Validação e Auditoria Técnico</h2>
+                <p>Analise os relatórios dos prestadores e autorize a liquidação instantânea do pagamento em garantia.</p>
+            </div>
+            <div class="workspace-grid">
+                <div class="os-sidebar-container">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Buscar por O.S. pendente...">
+                    </div>
+                    <span class="os-sidebar-title">Aguardando Inspeção</span>
+                    <div class="os-scroll-list">
+                        <div class="os-list-card active">
+                            <div class="os-list-header"><span class="id">O.S. #1024</span><span class="value">2.500 USDC</span></div>
+                            <p>Manutenção Mecânica / Usinagem</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #1019</span><span class="value">1.800 USDC</span></div>
+                            <p>Instalação Elétrica Industrial</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0994</span><span class="value">4.200 USDC</span></div>
+                            <p>Sistemas de Climatização (HVAC)</p>
+                        </div>
+                        <div class="os-list-card">
+                            <div class="os-list-header"><span class="id">O.S. #0981</span><span class="value">950 USDC</span></div>
+                            <p>Reparo de Caldeira de Vapor</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-detail-card">
+                    <div class="card-header-info">
+                        <div>
+                            <span class="os-badge">O.S. EM ANÁLISE: #1024</span>
+                            <h3 class="contract-title">Avaliação Técnica - Compressor Bloco B</h3>
+                        </div>
+                        <div class="status-badge ready"><i class="fa-solid fa-clipboard-check"></i> Pronto para Auditoria</div>
+                    </div>
+                    <div class="meta-info-grid">
+                        <div class="meta-box">
+                            <div class="meta-icon icon-building"><i class="fa-solid fa-building"></i></div>
+                            <div class="meta-text"><span>Contratante</span><h4>0x818C...F8F8</h4></div>
+                        </div>
+                        <div class="meta-box">
+                            <div class="meta-icon icon-wrench"><i class="fa-solid fa-wrench"></i></div>
+                            <div class="meta-text"><span>Prestador</span><h4>0x3F9A...44B2</h4></div>
+                        </div>
+                        <div class="meta-box">
+                            <div class="meta-icon icon-lock"><i class="fa-solid fa-lock"></i></div>
+                            <div class="meta-text"><span>Alocado</span><h4 class="amount">2.500 USDC</h4></div>
+                        </div>
+                    </div>
+                    <div class="description-block">
+                        <h5>Declaração de Conclusão do Executor:</h5>
+                        <p>"Todos os filtros de linha foram substituídos, o óleo lubrificante de alta viscosidade foi renovado e os testes de pressão estática apontaram estabilidade em 9.5 bar. O ativo já está disponível para operação comercial."</p>
+                    </div>
+                    <div class="actions-area">
+                        <button class="btn-approve"><i class="fa-solid fa-unlock"></i> Aprovar e Liberar Pagamento</button>
+                        <button class="btn-reject-cancel"><i class="fa-solid fa-ban"></i> Recusar e Cancelar</button>
+                        <button class="btn-reject-review"><i class="fa-solid fa-rotate-left"></i> Solicitar Revisão</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            // 1. Remove active de todos os botões do menu lateral
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+            // 2. Adiciona active no botão que foi clicado
+            item.classList.add('active');
+
+            // 3. Esconde todas as telas da direita
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+
+            // 4. Mostra o painel correto com base no data-target
+            const targetId = item.getAttribute('data-target');
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
+</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+    <script src="safeservice-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe|Service - Conectando Serviços com Segurança</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* CONFIGURAÇÕES GERAIS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc; /* Fundo claro e moderno */
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* HEADER / CABEÇALHO */
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo span {
+            color: #3b82f6;
+        }
+
+        /* HERO SECTION (Seção Principal) */
+        .hero {
+            max-width: 900px;
+            margin: 60px auto 40px;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #475569;
+            line-height: 1.6;
+            max-width: 760px;
+            margin: 0 auto 16px;
+        }
+        
+        /* Link Saiba Mais no texto */
+        .txt-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+        .txt-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Botão Conectar Carteira (Estilo pílula centralizado) */
+        .cta-container {
+            margin: 32px 0 50px;
+        }
+        .btn-connect {
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .btn-connect:hover {
+            background-color: #1e293b;
+            transform: translateY(-2px);
+        }
+
+        /* GRID COM 4 IMAGENS REAIS E TOTALMENTE LIMPAS */
+        .image-grid {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .grid-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 340px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            background-color: #e2e8f0; /* Fundo de carregamento sutil */
+        }
+        .grid-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+            display: block;
+        }
+        .grid-card:hover img {
+            transform: scale(1.04);
+        }
+
+        /* SEÇÃO DETALHADA */
+        .details-section {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 80px 20px;
+        }
+        .details-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .details-section h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        /* Blocos Explicativos */
+        .info-block {
+            margin-bottom: 48px;
+        }
+        .info-block h3 {
+            font-size: 22px;
+            color: #1e3a8a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-block p {
+            font-size: 18px;
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        /* Passos do Funcionamento */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .step-card {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .step-num {
+            font-size: 32px;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 12px;
+        }
+        .step-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .step-card p {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* RODAPÉ */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><i class="fa-solid fa-shield-halved"></i> Safe<span>Service</span></div>
+    </header>
+
+    <section class="hero">
+        <h1>Conecte Prestadores de Serviço à sua Empresa com Risco Zero</h1>
+        <p>
+            Uma forma <strong>segura e transparente</strong> de conectar prestadores de serviços a empresas, onde os pagamentos são garantidos e automáticos com base no cumprimento de regras claras, sem a necessidade de intermediários ou papelada excessiva.
+        </p>
+        <a href="#explica-servico" class="txt-link">Saiba mais sobre como funciona <i class="fa-solid fa-arrow-down"></i></a>
+        
+        <div class="cta-container">
+            <button id="btn-connect-wallet" class="btn-connect">
+                <i class="fa-solid fa-wallet"></i> Conectar Carteira Digital
+            </button>
+        </div>
+    </section>
+
+    <section class="image-grid">
+        <div class="grid-card">
+            <img src="https://images.pexels.com/photos/442154/pexels-photo-442154.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Técnico conectando cabos de rede" width="600">
+        </div>
+        <div class="grid-card">
+            <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=cover&w=600&q=80" alt="Instalação Elétrica">
+        </div>
+        <div class="grid-card">
+            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=cover&w=800&q=80" alt="Corte e Usinagem de Precisão" width="600">
+        </div>
+        <div class="grid-card">
+            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=cover&w=600&q=80" alt="Infraestrutura Industrial">
+        </div>
+    </section>
+
+    <section id="explica-servico" class="details-section">
+        <div class="details-container">
+            <h2>Como o Safe|Service Revoluciona as Contratações</h2>
+            
+            <div class="info-block">
+                <h3><i class="fa-solid fa-circle-info"></i> O que é este serviço?</h3>
+                <p>
+                    O Safe|Service é um sistema inteligente de garantia para contratações de serviços industriais e corporativos. Nós eliminamos a desconfiança comercial entre quem contrata (a fábrica) e quem executa o serviço (o fornecedor terceirizado). Em vez de depender de contratos de papel complexos, promessas de pagamento em 90 dias ou o medo de pagar adiantado e não receber o serviço, nossa plataforma usa tecnologia de automação digital para proteger as duas pontas da operação.
+                </p>
+            </div>
+
+            <div class="info-block">
+                <h3><i class="fa-solid fa-gears"></i> Como funciona, na prática?</h3>
+                <p>
+                    Tudo funciona por meio de uma conta digital segura e automatizada vinculada à Ordem de Serviço (O.S.). Quando a sua empresa fecha um trabalho, o valor combinado é enviado e fica <strong>guardado de forma protegida</strong> nessa conta digital. O prestador consegue ver que o dinheiro está reservado para ele, o que dá a garantia de que ele receberá assim que terminar. A empresa contratante tem a certeza de que o dinheiro só sairá dali quando o fiscal aprovar a entrega no chão de fábrica.
+                </p>
+                
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-num">1</div>
+                        <h4>Garantia do Valor</h4>
+                        <p>A empresa contrata o serviço e deposita o pagamento na conta segura do projeto. O dinheiro fica guardado.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">2</div>
+                        <h4>Trabalho Sem Medo</h4>
+                        <p>O técnico realiza o serviço (elétrico, civil, mecânico) sabendo que o saldo está 100% reservado e garantido.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">3</div>
+                        <h4>Liberação Automática</h4>
+                        <p>O fiscal inspeciona a máquina e clica em "Aprovar". O sistema transfere o dinheiro ao prestador na mesma hora.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <h3><i class="fa-solid fa-lock"></i> Por que isso é seguro e usa Blockchain?</h3>
+                <p>
+                    Usamos a tecnologia Blockchain apenas como uma camada matemática de confiança. Significa que as regras de pagamento são escritas em um código de computador que <strong>nenhuma das duas partes pode alterar ou fraudar</strong> depois que o serviço começa. O cliente não pode simplesmente "cancelar o Pix" após o serviço pronto, e o fornecedor não consegue sacar o dinheiro sem a devida validação do fiscal técnico. É a automação financeira trazendo eficiência e eliminando a burocracia de cobrança.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Safe|Service. Projeto desenvolvido para o Desafio Web3.0 Hackathon.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+    <script src="landing-page-web3.js"></script>
+</body>
+</html>

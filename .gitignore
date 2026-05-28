@@ -1,0 +1,11 @@
+# Segredos — NUNCA commitar
+Contratos/.env
+
+# Dependências e build (pesados, regeneráveis via npm install)
+Contratos/node_modules/
+Contratos/artifacts/
+Contratos/cache/
+Contratos/package-lock.json
+
+# Configuração local do Claude
+.claude/
