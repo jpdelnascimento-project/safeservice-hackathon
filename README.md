@@ -10,7 +10,7 @@ Contrato deployado na **Sepolia Testnet**: `0xe512Bbacd2B2af97D91FAB0319Fd79Da90
 
 Acede diretamente pelo browser:
 
-**https://jpdelnascimento.github.io/safeservice-hackathon/Paginas/landing-page-rev3.html**
+**https://jpdelnascimento-project.github.io/safeservice-hackathon/Paginas/landing-page-rev3.html**
 
 Precisas apenas de:
 - **MetaMask** instalado no browser ([instalar](https://metamask.io/download/))
