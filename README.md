@@ -1,22 +1,26 @@
 # Safe|Service
 
+**Objetivo**
+
+Construir um Smart contract capaz de automatizar acordos e pagamento de serviçoes entre duas parte para prestação de serviços, tais como serviços elétricos, construção, usinagem, etc.
+
 **Plataforma descentralizada de escrow para serviços industriais** — Hackathon Web3
 
 Contrato deployado na **Sepolia Testnet**: `0xe512Bbacd2B2af97D91FAB0319Fd79Da90b66788`
 
 ---
 
-## Testar agora (sem instalar nada)
+## Como Testar: 
 
-Acede diretamente pelo browser:
+Acesse diretamente pelo browser:
 
 **https://jpdelnascimento-project.github.io/safeservice-hackathon/Paginas/landing-page-rev3.html**
 
-Precisas apenas de:
-- **MetaMask** instalado no browser ([instalar](https://metamask.io/download/))
-- **3 contas MetaMask** na rede Sepolia (ou pede a 2 colegas)
-- **Sepolia ETH** (para gas) — obtém grátis em [sepoliafaucet.com](https://sepoliafaucet.com)
-- **USDC Sepolia** (para criar a Ordem de Serviço) — obtém grátis em [https://faucet.circle.com/)
+Requisitos para teste:
+- **MetaMask** instalado no browser ([instalar](https://metamask.io/download/)) ou outra carteira. 
+- **3 contas MetaMask** na rede Sepolia
+- **Sepolia ETH** (para gas) — obtenha faucet em [sepoliafaucet.com](https://sepoliafaucet.com)
+- **USDC Sepolia** (para criar a Ordem de Serviço) — obtém faucet em [https://faucet.circle.com/)
 
 > Todos os fundos são de teste (sem valor real). A rede é Sepolia Testnet.
 
@@ -26,24 +30,11 @@ Precisas apenas de:
 
 | Passo | Carteira | Ação |
 |---|---|---|
-| 1 | **A — Contratante** | Conecta → Screen 1 → Preenche formulário → Cria O.S. (2 transações: approve USDC + criarOrdem) |
-| 2 | **B — Prestador** | Desconecta → Conecta como B → Screen 2 → Clica na O.S. → "Finalizar Serviço" |
-| 3 | **C — Fiscal** | Desconecta → Conecta como C → Screen 3 → Clica na O.S. → "Aprovar Pagamento" |
+| 1 | **A — Contratante** | Conecta conta A → Preencha formulário em "Empresa Contratante" com os endereços do Prestador e do Fiscal →  Cria O.S. (2 transações: approve USDC + criarOrdem) |
+| 2 | **B — Prestador** | Conecta conta B → Acesse "Painel do Prestador" → Clica na O.S. → "Finalizar Serviço" |
+| 3 | **C — Fiscal** | Conecta conta C → Acesse "Inspeção" → Clica na O.S. → "Aprovar Pagamento" |
 
 Após o Passo 3, os USDC são transferidos automaticamente para a Carteira B (Prestador).
-
----
-
-## Como adicionar a rede Sepolia ao MetaMask
-
-1. MetaMask → clica na rede atual (topo) → "Adicionar rede"
-2. Procura "Sepolia" → Adicionar
-3. Ou configura manualmente:
-   - **Nome**: Sepolia Testnet
-   - **RPC**: `https://rpc.sepolia.org`
-   - **Chain ID**: `11155111`
-   - **Símbolo**: ETH
-   - **Explorer**: `https://sepolia.etherscan.io`
 
 ---
 
@@ -77,15 +68,9 @@ Após o Passo 3, os USDC são transferidos automaticamente para a Carteira B (Pr
 
 ---
 
-## Para redesployar o contrato (opcional)
+## Equipe
 
-<details>
-<summary>Expandir instruções de deploy</summary>
-
-Precisas de Node.js instalado e de uma conta Alchemy.
-
-1. Clona o repositório
-2. Copia `Contratos/.env.example` para `Contratos/.env` e preenche com a tua Alchemy URL e chave privada MetaMask
-3. Corre `.\DEPLOY.ps1` no PowerShell
-
-</details>
+- João Paulo do Nascimento - Dev
+- Carlos Magno Souza - QA
+- Alcides Mello Junior - Produto
+- Julio - Tech Lead
