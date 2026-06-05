@@ -16,7 +16,7 @@ Precisas apenas de:
 - **MetaMask** instalado no browser ([instalar](https://metamask.io/download/))
 - **3 contas MetaMask** na rede Sepolia (ou pede a 2 colegas)
 - **Sepolia ETH** (para gas) — obtém grátis em [sepoliafaucet.com](https://sepoliafaucet.com)
-- **USDC Sepolia** (para criar a Ordem de Serviço) — obtém grátis em [app.aave.com/faucet](https://app.aave.com/faucet) → procura "USDC"
+- **USDC Sepolia** (para criar a Ordem de Serviço) — obtém grátis em [https://faucet.circle.com/)
 
 > Todos os fundos são de teste (sem valor real). A rede é Sepolia Testnet.
 
