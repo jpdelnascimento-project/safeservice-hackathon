@@ -2,7 +2,8 @@
 
 **Objetivo**
 
-Construir um Smart contract capaz de automatizar acordos e pagamento de serviçoes entre duas parte para prestação de serviços, tais como serviços elétricos, construção, usinagem, etc.
+A SafeService é uma plataforma de contratos inteligentes que resolve um problema clássico de mercado: 
+A falta de confiança na prestação de serviços. Criamos uma arquitetura onde empresas e prestadores se conectam diretamente, garantindo de forma automatizada — via smart contracts — que o serviço seja entregue e o pagamento seja liberado com total segurança, sem a necessidade de intermediários centralizados.
 
 **Plataforma descentralizada de escrow para serviços industriais** — Hackathon Web3
 
